@@ -1,9 +1,11 @@
 const express = require('express');
-const { readFileMovies, moviesById } = require('./utils');
+const { readFileMovies, moviesById, insertMovie } = require('./utils');
 
 const app = express();
+app.use(express.json());
 
-app.get('/movies', async (req, res) => {
+// Exercicio 6
+app.get('/movies', async (_req, res) => {
     const movies = await readFileMovies();
 
     return res.status(200).json({ movies });
@@ -21,4 +23,10 @@ app.get('/movies/:id', async (req, res) => {
     return res.status(200).json({ movie });
 });
 
+app.post('/movies', async (req, res) => {
+    const { ...body } = req.body;
+    const newMovie = await insertMovie(body);
+    
+    return res.status(201).json(newMovie);
+});
 module.exports = app;
