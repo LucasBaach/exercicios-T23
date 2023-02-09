@@ -38,8 +38,41 @@ const createBook = async (req, res) => {
     }
 }
 
+const updateBook = async (req, res) => {
+    try {
+        const { title, author, pageQuantity } = req.body;
+        const { id } = req.params;
+
+        const updatedBook = await BookServices.updateBook(id, {title, author, pageQuantity});
+
+        if (!updatedBook) return res.status(404).json({ message: 'Book not found' });
+        
+        return res.status(200).json({ message: 'Livro atualizado com sucesso' }); 
+    } catch (e) {
+        console.log(e.message);
+        res.status(500).json({ message: err500Msg });
+    }
+};
+
+const deleteBook = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const delBook = await BookServices.deleteBook(id);
+
+        if (!delBook) return res.status(404).json({ message: 'Book not found' });
+
+        return res.status(200).json({ message: 'Livro deletado com sucesso' });
+    } catch (e) {
+        console.log(e.message);
+        res.status(500).json({ message: err500Msg });
+    }
+};
+
+
 module.exports = {
     getAll,
     getById,
     createBook,
+    updateBook,
+    deleteBook,
 }
