@@ -1,5 +1,5 @@
 const express = require('express');
-const { readFileMovies, moviesById, insertMovie } = require('./utils');
+const { readFileMovies, moviesById, insertMovie, writeFileMovies } = require('./utils');
 
 const app = express();
 app.use(express.json());
@@ -28,5 +28,23 @@ app.post('/movies', async (req, res) => {
     const newMovie = await insertMovie(body);
     
     return res.status(201).json(newMovie);
+});
+
+app.put('/movies/:id', async (req, res) => {
+    const { id } = req.params;
+    const { movie, price } = req.body;
+   
+    const movieId = await moviesById(id);
+
+    if (!movieId) {
+        res.status(404).json({ message: 'Not found' });
+    }
+    
+    movieId.movie = movie;
+    movieId.price
+
+    await writeFileMovies(movies);
+
+    res.status(200).json(movies[movieId]);
 });
 module.exports = app;
