@@ -8,6 +8,8 @@ app.get('/books', Book.getAll );
 
 app.get('/books/:id', Book.getById);
 
+app.get('/books/search/:id', Book.getByAuthor);
+
 app.post('/books', Book.createBook);
 
 app.put('/books/:id', Book.updateBook);

@@ -12,6 +12,12 @@ const getById = async (id) => {
     return book;
 }
 
+const getByAuthor = async (author) => {
+const authorB = await Book.findAll({ where: { author }});
+
+    return authorB;
+}
+
 const createBook = async (title, author, pageQuantity) => {
     const newBook = await Book.create({ title, author, pageQuantity });
 
@@ -38,6 +44,7 @@ const deleteBook = async (id) => {
 module.exports = {
     getAll,
     getById,
+    getByAuthor,
     createBook,
     updateBook,
     deleteBook,

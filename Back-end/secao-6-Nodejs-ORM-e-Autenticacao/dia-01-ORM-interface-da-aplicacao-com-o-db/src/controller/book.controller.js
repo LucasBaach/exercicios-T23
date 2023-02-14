@@ -2,9 +2,18 @@ const BookServices = require('../service/book.service');
 
 const err500Msg = 'Algo deu errado';
 
-const getAll = async (_req, res) => {
+const getAll = async (req, res) => {
     try {
-        const books = await BookServices.getAll();
+        const { author } = req.query;
+
+        let books;
+
+        if (author) {
+            books = await BookServices.getByAuthor(author);
+        } else {
+            books = await BookServices.getAll();
+        }
+       
         return res.status(200).json(books);
     } catch (e) {
         console.log(e.message);
@@ -20,6 +29,21 @@ const getById = async (req, res) => {
         if (!book) return res.status(404).json({ message: 'Book not found' });
 
         return res.status(200).json(book);
+    } catch (e) {
+        console.log(e.message);
+        res.status(500).json({ message: err500Msg });
+    }
+}
+
+const getByAuthor = async (req, res) => {
+    try {
+        const { author } = req.query;
+
+        const escritor = await BookServices.getByAuthor( author);
+
+        if (!escritor) return res.status(404).json({ message: 'Author not found' });
+
+        return res.status(200).json(escritor);
     } catch (e) {
         console.log(e.message);
         res.status(500).json({ message: err500Msg });
@@ -72,6 +96,7 @@ const deleteBook = async (req, res) => {
 module.exports = {
     getAll,
     getById,
+    getByAuthor,
     createBook,
     updateBook,
     deleteBook,
